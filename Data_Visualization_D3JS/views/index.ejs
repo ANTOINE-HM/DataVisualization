@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+
+     #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        border-radius: 20px;
+    }
+
+    .link {
+        stroke: #c1c1c1;
+        stroke-width: 2px;
+        pointer-events: all;
+    }
+
+    .node circle {
+        pointer-events: all;
+        stroke: #777;
+        stroke-width: 1px;
+    }
+
+    div.tooltip {
+        position: absolute;
+        background-color: #000000;
+        color : white;
+        max-width: 200px;
+        height: auto;
+        padding: 1px;
+        border-style: solid;
+        border-radius: 4px;
+        border-width: 1px;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
+        pointer-events: none;
+    }
+
+     .css-button-3d--green {
+         min-width: 130px;
+         height: 40px;
+         color: #fff;
+         padding: 5px 10px;
+         font-weight: bold;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         position: relative;
+         display: inline-block;
+         outline: none;
+         border-radius: 5px;
+         border: none;
+         background: #80ed99;
+         box-shadow: 0 5px #57cc99;
+     }
+     .css-button-3d--green:hover {
+         box-shadow: 0 3px #57cc99;
+         top: 1px;
+     }
+     .css-button-3d--green:active {
+         box-shadow: 0 0 #57cc99;
+         top: 5px;
+     }
+
+    .my_input{
+        width: 360px;
+        background: #fff;
+        color: #a3a3a3;
+        font: inherit;
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .1);
+        border: 0;
+        outline: 0;
+        padding: 22px 18px;
+    }
+
+    .research{
+        margin-left: 20px;
+        grid-area: research;
+    }
+
+     .container {
+         display: grid;
+         grid-template-columns: 1.4fr 0.5fr 1.1fr;
+         grid-template-rows: 1.1fr 0.9fr 1fr;
+         gap: 10px 10px;
+         grid-template-areas:
+    "Recherche Recherche Radial-Bar-chart"
+    "Network-graph Network-graph Radial-Bar-chart"
+    "Network-graph Network-graph Songs-list";
+         font-family: "Gill Sans", sans-serif;
+     }
+
+     .slidecontainer{
+         margin-top: 20px;
+         margin-left: 20px;
+         grid-area: slidecontainer;
+     }
+
+     .select-box select {
+         background-color: #57cc99;
+         color: white;
+         padding: 12px;
+         width: 250px;
+         border: none;
+         font-size: 20px;
+         box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+         -webkit-appearance: button;
+         outline: none;
+     }
+
+     .select-box:hover::before {
+         color: rgba(255, 255, 255, 0.6);
+         background-color: rgba(255, 255, 255, 0.2);
+     }
+
+     .select-box select option {
+         padding: 30px;
+     }
+
+    .Recherche {
+        background: #37513a;
+        color: white;
+        display: grid;
+        grid-template-columns: 1fr 0.8fr 1.2fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+    "slidecontainer slidecontainer Type-filter"
+    "research research Type-filter"
+    "research research Type-filter";
+        grid-area: Recherche;
+        border-radius: 30px;
+        border: solid 4px #57cc99;
+    }
+
+     .Type-filter {
+         margin-right: 30px;
+         margin-top: 20px;
+         grid-area: Type-filter;
+         border-radius: 30px;
+     }
+
+     .toggle-pill-color input[type="checkbox"] {
+         display: none;
+     }
+     .toggle-pill-color input[type="checkbox"] + label {
+         display: block;
+         position: relative;
+         width: 3em;
+         height: 1.6em;
+         margin-bottom: 20px;
+         border-radius: 1em;
+         background: #e84d4d;
+         box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3);
+         cursor: pointer;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         -webkit-transition: background 0.1s ease-in-out;
+         transition: background 0.1s ease-in-out;
+     }
+     .toggle-pill-color input[type="checkbox"] + label:before {
+         content: "";
+         display: block;
+         width: 1.2em;
+         height: 1.2em;
+         border-radius: 1em;
+         background: #fff;
+         box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+         position: absolute;
+         left: 0.2em;
+         top: 0.2em;
+         -webkit-transition: all 0.2s ease-in-out;
+         transition: all 0.2s ease-in-out;
+     }
+     .toggle-pill-color input[type="checkbox"]:checked + label {
+         background: #47cf73;
+     }
+     .toggle-pill-color input[type="checkbox"]:checked + label:before {
+         box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+         left: 1.6em;
+     }
+
+    .Network-graph {
+        grid-area: Network-graph;
+        background: #ffffff;
+        border: solid 4px #57cc99;
+        border-radius: 30px;
+        padding-left : 20px;
+    }
+
+    .Radial-Bar-chart {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        grid-area: Radial-Bar-chart;
+        background: #3da55e;
+        border-radius: 30px;
+    }
+
+     .Songs-list {
+         grid-area: Songs-list;
+         border-radius: 30px;
+         padding-left: 100px;
+         padding-top: 20px;
+         border-radius: 30px;
+         border: solid 4px #57cc99;
+     }
+
+
+</style>
+<head>  <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-circular-gauge.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet"></head>
+<body>
+
+<div class="container">
+    <div class="Recherche">
+        <div class="slidecontainer">
+            <input type="range" min="0" max="20" value="0" class="slider" id="myRange">
+            <p>Nombre minimum de collaborations: <span id="demo"></span></p>
+        </div>
+        <div class="research">
+            <input class="my_input" type="text" id="myText" placeholder="Nom d'un artiste, producteur ou label" value="">
+            <div>
+                <button type="button" class="css-button-3d--green" onclick="searchBarArtist()">Rechercher</button>
+            </div>
+            <input class="my_input" type="text" id="myGenre" placeholder="Genre de musique" value="">
+            <div>
+                <button type="button" class="css-button-3d--green" onclick="searchBarGenre()">Rechercher</button>
+            </div>
+        </div>
+        <div class="Type-filter">
+            <fieldset>
+                <legend>Choisir le type du collaborateur 1:</legend>
+                <div class="select-box">
+                    <select class="custom-select" id="listeClasse_source" onchange="listeDeroulante()">
+                        <option value="all">all</option>
+                        <option value="label" >label</option>
+                        <option value="writer">artiste</option>
+                        <option value="producer">producteur</option>
+                    </select>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Choisir le type du collaborateur 2:</legend>
+                <div class="select-box">
+                    <select class="custom-select" id="listeClasse_target" onchange="listeDeroulante()">
+                        <option value="all">all</option>
+                        <option value="label" >label</option>
+                        <option value="writer">artiste</option>
+                        <option value="producer">producteur</option>
+                    </select>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="Network-graph">
+        <p>Afficher les personnes n'ayant à priori pas de collaboration</p>
+        <div class="item">
+            <div class="toggle-pill-color">
+                <input onclick="updateData()" type="checkbox" id="accept" name="accept" value="yes">
+                <label for="accept"></label>
+            </div>
+        </div>
+        <div class="conteneur">
+            <svg width="800" height="500"></svg>
+        </div>
+    </div>
+    <div class="Radial-Bar-chart">
+        <div class="radial-bar-chart" id="container"></div>
+    </div>
+    <div class="Songs-list">
+        <h2>Liste des musiques</h2>
+        <svg2 class="songs"></svg2>
+    </div>
+</div>
+
+</body>
+
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script>
+
+
+    var color = d3.scaleOrdinal(d3.schemeSet3).range(["#ec3f3f", "#4891e2","#8ee956"]);
+
+    var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    var selectElmt_source ;
+    var valeurselectionnee_source;
+    var selectElmt_target ;
+    var valeurselectionnee_target;
+    let simulation;
+    let link;
+    var liste_deroulante_not_used_yet = true
+    let name_searched="";
+    let genre_searched="";
+    let svg2 = d3.select('svg2') ;
+    let svg3 = d3.select('svg3') ;
+    var list_genre = [
+    ];
+    output.innerHTML = 0;
+
+    const svg = d3.select('svg'),
+        width = +svg.attr('width'),
+        height = +svg.attr('height');
+
+
+
+    updateData()
+
+    function listeDeroulante(){
+        selectElmt_source = document.getElementById("listeClasse_source");
+        valeurselectionnee_source = selectElmt_source.options[selectElmt_source.selectedIndex].value;
+        selectElmt_target = document.getElementById("listeClasse_target");
+        valeurselectionnee_target = selectElmt_target.options[selectElmt_target.selectedIndex].value;
+        if(valeurselectionnee_target==="all" || valeurselectionnee_source==="all"){
+            liste_deroulante_not_used_yet = true
+        }else {
+            liste_deroulante_not_used_yet = false
+        }
+        updateData();
+    }
+
+    function searchBarArtist() {
+        name_searched = document.getElementById("myText").value;
+        updateData();
+    }
+
+    function searchBarGenre(){
+        genre_searched = document.getElementById("myGenre").value;
+        updateData();
+    }
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+        updateData();
+    }
+
+    function checkIfIncludesInTab(tab,searched){
+        for (let i = 0; i < tab.length; i++){
+            if(tab[i].includes(searched)) return 1
+        }
+        return 0
+    }
+
+    function updateData(){
+        svg.selectAll("*").remove();
+
+        graph = <%- JSON.stringify(data) %>;
+        let nodes_filtres =[] ;
+        let links_filtres =[];
+        let names_already_searched =[] ;
+
+        for (let i = 0; i < graph.links.length; i++) {
+            let current_source = graph.links[i]['source'];
+            let current_target = graph.links[i]['target'] ;
+            if(parseInt(graph.links[i].value) >output.innerHTML && current_source.substr(0,name_searched.length).includes(name_searched)
+                && (((graph.links[i].type1===valeurselectionnee_source && graph.links[i].type2===valeurselectionnee_target)
+                    || (graph.links[i].type2===valeurselectionnee_source && graph.links[i].type1===valeurselectionnee_target)
+                || liste_deroulante_not_used_yet) && checkIfIncludesInTab(graph.links[i].genres,genre_searched))
+            ){
+                links_filtres.push(graph.links[i]);
+                if(!names_already_searched.includes(current_source)){
+                    nodes_filtres.push({"id" : current_source, "group" : graph.links[i].type1})
+                    names_already_searched.push(current_source);
+                }
+                if(!names_already_searched.includes(current_target)){
+                    nodes_filtres.push({"id" : current_target, "group" : graph.links[i].type2})
+                    names_already_searched.push(current_target);
+                }
+            }
+        }
+        let unknown_collabs = document.querySelector('#accept').checked;
+
+        if (unknown_collabs){
+            for(let i=0; i<graph.unknown_collabs.length; i++){
+                if((valeurselectionnee_target===graph.unknown_collabs[i].statut || graph.unknown_collabs[i].statut === valeurselectionnee_source
+                        || liste_deroulante_not_used_yet)
+                    && graph.unknown_collabs[i].name.includes(name_searched)
+
+                )
+                    nodes_filtres.push({"id" : graph.unknown_collabs[i].name, "group" : graph.unknown_collabs[i].statut})
+            }
+        }
+
+        simulation = d3.forceSimulation()
+            .nodes(nodes_filtres)
+            .force('link', d3.forceLink().id(d => d.id))
+            .force('charge', d3.forceManyBody().strength(-0.5))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .on('tick', ticked);
+
+        simulation.force('link')
+            .links(links_filtres);
+
+
+        link = svg.selectAll('line')
+            .data(links_filtres)
+            .enter().append('line').style("stroke-width", links_filtres.value);
+        const R = 4;
+
+        link
+            .attr('class', 'link')
+            .on('mouseover.tooltip', function(d) {
+
+
+
+                let data2 = d.list_of_songs; // there are 6 data values in our data array
+                svg2.selectAll("*").remove();
+                d3.select('svg2').selectAll("span")
+                    .data(data2)
+                    .enter() // creates 6 reference placeholders
+                    .append("li") // append 6 span elements
+                    .text(function(d) { return d + " "; })
+                    width2 = +svg2.attr('width2'),
+                    height2 = +svg2.attr('height2');
+                let percent_filter=[];
+                for(let i=0; i<d.percent.length; i++){
+                    percent_filter.push(Math.ceil(d.percent[i]));
+                }
+
+                data_chart=percent_filter
+                list_genre=d.genres
+
+
+                document.getElementById("container").innerHTML = '';
+
+
+
+                var dataSet = anychart.data.set(data_chart);
+                var palette = anychart.palettes
+                    .distinctColors()
+                    .items([
+                        '#64b5f6',
+                        '#1976d2',
+                        '#ef6c00',
+                        '#ffd54f',
+                        '#455a64',
+                        '#96a6a6',
+                        '#dd2c00',
+                        '#00838f',
+                        '#00bfa5',
+                        '#ffa000'
+                    ]);
+
+                var makeBarWithBar = function (gauge, radius, i, width) {
+                    var stroke = null;
+                    gauge
+                        .label(i)
+                        .text(list_genre[i] + ', <span style="">' + data_chart[i] + '%</span>') // color: #7c868e
+                        .useHtml(true);
+                    gauge
+                        .label(i)
+                        .hAlign('center')
+                        .vAlign('middle')
+                        .anchor('right-center')
+                        .padding(0, 10)
+                        .height(width / 2 + '%')
+                        .offsetY(radius + '%')
+                        .offsetX(0);
+
+                    gauge
+                        .bar(i)
+                        .dataIndex(i)
+                        .radius(radius)
+                        .width(width)
+                        .fill(palette.itemAt(i))
+                        .stroke(null)
+                        .zIndex(5);
+                    gauge
+                        .bar(i + 100)
+                        .dataIndex(5)
+                        .radius(radius)
+                        .width(width)
+                        .fill('#F5F4F4')
+                        .stroke(stroke)
+                        .zIndex(4);
+
+                    return gauge.bar(i);
+                };
+
+                anychart.onDocumentReady(function () {
+                    var gauge = anychart.gauges.circular();
+                    gauge.data(dataSet);
+                    gauge
+                        .fill('#fff')
+                        .stroke(null)
+                        .padding(0)
+                        .margin(100)
+                        .startAngle(0)
+                        .sweepAngle(270);
+
+                    var axis = gauge.axis().radius(100).width(1).fill(null);
+                    axis
+                        .scale()
+                        .minimum(0)
+                        .maximum(100)
+                        .ticks({ interval: 1 })
+                        .minorTicks({ interval: 1 });
+                    axis.labels().enabled(false);
+                    axis.ticks().enabled(false);
+                    axis.minorTicks().enabled(false);
+
+                    for(let i=0; i<list_genre.length; i++){
+                        makeBarWithBar(gauge, 100-i*(100/list_genre.length), i, 17);
+                    }
+
+
+
+                    gauge.margin(50);
+                    gauge
+                        .title()
+                        .text(
+                            'Proportion genre musicaux'
+                        )
+                        .useHtml(true);
+                    gauge
+                        .title()
+                        .enabled(true)
+                        .hAlign('center')
+                        .padding(0)
+                        .margin([0, 0, 20, 0]);
+
+                    gauge.container('container');
+                    gauge.draw();
+                });
+
+
+                tooltip.transition()
+                    .duration(300)
+                    .style("opacity", .8);
+                tooltip.html("Collaborateur 1: "+ d.source.id +
+                    "<p/>Collaborateur 2: " + d.target.id +
+                    "<p/>Nombre de collaborations: "  + d.value)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY + 10) + "px");
+            })
+            .on("mouseout.tooltip", function() {
+                tooltip.transition()
+                    .duration(100)
+                    .style("opacity", 0);
+            })
+            .on('mouseout.fade', fade(1))
+            .on("mousemove", function() {
+                tooltip.style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY + 10) + "px");
+            });
+        ;
+
+        let node = svg.selectAll('.node')
+            .data(nodes_filtres)
+            .enter().append('g')
+            .attr('class', 'node')
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));;
+
+        node.append('circle')
+            .attr('r', R)
+            .attr("fill", function(d) { return color(d.group);})
+            .on('mouseover.tooltip', function(d) {
+                tooltip.transition()
+                    .duration(300)
+                    .style("opacity", .8);
+                tooltip.html("Nom: " + d.id + "<p/>label: " + d.group)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY + 10) + "px");
+            })
+            .on('mouseover.fade', fade(0.1))
+            .on("mouseout.tooltip", function() {
+                tooltip.transition()
+                    .duration(100)
+                    .style("opacity", 0);
+            })
+            .on('mouseout.fade', fade(1))
+            .on("mousemove", function() {
+                tooltip.style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY + 10) + "px");
+            })
+            .on('dblclick',releasenode)
+
+
+        node.append('text')
+            .attr('x', 0)
+            .attr('dy', '.35em')
+            .text(d => d.name);
+
+        function ticked() {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node
+                .attr('transform', d => `translate(${d.x},${d.y})`);
+        }
+
+        function dragstarted(d) {
+            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+
+        function dragended(d) {
+            if (!d3.event.active) simulation.alphaTarget(0);
+            //d.fx = null;
+            //d.fy = null;
+        }
+
+        function releasenode(d) {
+            d.fx = null;
+            d.fy = null;
+        }
+
+        const linkedByIndex = {};
+        links_filtres.forEach(d => {
+            linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+        });
+
+        function isConnected(a, b) {
+            return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+        }
+
+        function fade(opacity) {
+            return d => {
+                node.style('stroke-opacity', function (o) {
+                    const thisOpacity = isConnected(d, o) ? 1 : opacity;
+                    this.setAttribute('fill-opacity', thisOpacity);
+                    return thisOpacity;
+                });
+
+                link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+
+            };
+        }
+        var sequentialScale = d3.scaleOrdinal(d3.schemeSet3)
+            .domain(["writer", "producer","label"])
+            .range(["#ec3f3f", "#4891e2","#8ee956"]);
+
+
+        svg.append("g")
+            .attr("class", "legendSequential")
+            .attr("transform", "translate("+(width-100)+","+(height-100)+")");
+
+
+        var legendSequential = d3.legendColor()
+            .shapeWidth(30)
+            .cells(3)
+            .orient("vertical")
+            .scale(sequentialScale)
+
+        svg.select(".legendSequential")
+            .call(legendSequential);
+    }
+
+</script>
